@@ -16,8 +16,11 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Event' => [
             'App\Listeners\EventListener',
         ],
-    ];
-
+        'App\Events\SendMail' => [
+            'App\Listeners\SendMailFired',
+        ],
+    ];  
+    
     /**
      * Register any events for your application.
      *

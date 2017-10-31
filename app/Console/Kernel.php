@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-//         \App\Console\Commands\Inspire::class,
+            '\App\Console\Commands\DailyScheduler',
     ];
 
     /**
@@ -26,8 +26,10 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-        $schedule -> exec("test");
-//        $res=DB::table('scheduler')->select();
+//        $schedule -> exec("test");
+        $schedule->command('DailyScheduler:dailyschedule')
+                 ->everyMinute();
+//                ->dailyAt('13:00');
         
     }
 
