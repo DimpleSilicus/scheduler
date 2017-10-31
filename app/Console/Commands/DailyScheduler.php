@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
 use App\Events;
-
+use App\Events\Event;
 use App\Events\SendMail;
 
 class DailyScheduler extends Command
@@ -55,7 +55,8 @@ class DailyScheduler extends Command
             if($DailyResult[$i]->interval == 'daily') {                
 //                echo "sd";
 //                Event::fire(new ActionDone(1));
-                Event::fire(new SendMail(1));
+//                Event::fire(new SendMail(1));
+                event(new SendMail(1));
                 
             }
                 

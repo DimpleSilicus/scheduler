@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\DB;
 
 use Modules\Scheduler\Model\Scheduler;
-
+use Modules\Scheduler\Model\EmailTemplate;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 //use Modules\ToolKit\Workshop;
@@ -97,12 +97,21 @@ class SchedulerController extends Controller
         echo "mem::".$member;
     }
     
-    public function getDailyScheduler()
-    {
-        $ResDaily=Scheduler::getAllDailySchedulerbyUserId(Auth::id());
-        print_r($ResDaily);
+    public function GetTemplate() {
         
-        return view('Scheduler::scheduler_home')->with('resDaily', $ResDaily);
+        $res=EmailTemplate::GetTemplate();
+        
+//        print_r($res);
+        return $res;
     }
+
+
+//    public function getDailyScheduler()
+//    {
+//        $ResDaily=Scheduler::getAllDailySchedulerbyUserId(Auth::id());
+//        print_r($ResDaily);
+//        
+//        return view('Scheduler::scheduler_home')->with('resDaily', $ResDaily);
+//    }
     
 }

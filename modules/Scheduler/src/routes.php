@@ -41,4 +41,6 @@ Route::group([
 //    Route::get('home', 'SchedulerController@showHomePage');
     Route::get('/schedulerHome', 'SchedulerController@showHomePage');
     Route::post('/add_scheduler', 'SchedulerController@AddDailyScheduler');
+    
+    Route::post('get_template', 'SchedulerController@GetTemplate');
 });

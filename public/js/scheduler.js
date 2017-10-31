@@ -42,27 +42,55 @@ $(document).ready(function () {
 
 
 
-function addScheduler()
-{
-    alert('addScheduler');
-}
+//function addScheduler()
+//{
+//    alert('addScheduler');
+//}
 
-function GetSchedulerTime(scheduler_type)
+function showTemplate(schedule_type)
+{
+    var option='';
+ $.ajax({
+	    	headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+	    	url: '/get_template',
+	        //dataType: "json",
+                type: 'POST',
+//	        data: formData,
+	        success: function(data) {
+                    console.log('dsfds'+JSON.stringify(data));
+                    for (var i = 0; i < data.length; i++) {
+                        option +='<option value="'+data.name+'">'+data.name+'</option>';
+                    }
+                    $('#Template').append('<select class="form-control has-info" id="scheduleTemplate" name="scheduleTemplate" placeholder="Placeholder" required>'+option+'</select>');
+	        	
+	        },
+	        error: function(data) {      
+	        		var obj = jQuery.parseJSON(data.responseText);	   
+//		        	 if (obj.familyName) {
+//			        	$("#addFamilyModal #famName-div").addClass("has-error");
+//		            	$('#addFamilyModal #form-errors-famName').html(obj.familyName);
+//		        	 }
+	        }
+	    });
+            
+    
+}
+function GetSchedulerTime(scheduler_interval)
 {
 //    var html='';
-    alert("type:::"+scheduler_type);
-    if(scheduler_type== 'daily')
+    alert("type:::"+scheduler_interval);
+    if(scheduler_interval== 'daily')
     {
         alert('daily');
         $('#schedulerDate').append('<div class="input-group"><input type="text" class="form-control" id="schedulerDate" name="schedulerDate" required/><span class="form-highlight"></span><span class="form-bar"></span><label class="hasdrodown" for="personDob">Date</label><label class="input-group-addon modal-datepicker-ico" for="schedulerDate"><span class="glyphicon glyphicon-th"></span></label><span class="text-danger" id="personEvents-div"><strong id="form-errors-personEvents"></strong></div>');
     }
-    else if(scheduler_type == 'weekly')
+    else if(scheduler_interval == 'weekly')
     {
         alert('weekly');
         var daysOfWeekHtml=gernerateDayofWeek();
         $('#schedulerDate').html(daysOfWeekHtml);
     }
-    else if(scheduler_type == 'monthly')
+    else if(scheduler_interval == 'monthly')
     {
         alert('monthly');
         var daysOfWeekHtml=gernerateDayofMonth();

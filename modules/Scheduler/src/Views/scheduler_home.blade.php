@@ -64,7 +64,7 @@
                                 <h5>Scheduler Type *</h5>
                                 
                                 <div class="input-group width-100Per">
-                                    <select class="form-control has-info" id="schedulerType" name="schedulerType" placeholder="Placeholder" required>
+                                <select class="form-control has-info" id="schedulerType" name="schedulerType" onchange="showTemplate(this.value)" placeholder="Placeholder" required>
                                         <option selected="selected" value="">Select Scheduler Type</option>                                        
                                         <option value="email">Email</option>
                                         <option value="batch">Batch</option>
@@ -72,6 +72,10 @@
                                     <span class="form-highlight"></span>
                                     <span class="form-bar"></span>
                                   	<span class="text-danger" id="filename-div"><strong id="form-errors-filename"></strong>
+                                        <br/>
+                                        <div id='Template'>
+                                            
+                                        </div>
                                 </div>
                                 <h5>Scheduler Interval *</h5>
                                 
