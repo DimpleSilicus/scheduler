@@ -1,0 +1,20 @@
+{
+    "name": "modules/scheduler",
+    "description": "This is a scheduler module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dimple Agarwal",
+            "email": "dimple.agarwal@silicus.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Modules\\Scheduler": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "Illuminate/support": "~5"
+    }
+}
