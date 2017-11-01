@@ -13,9 +13,10 @@ class ActionDone extends Event {
      *
      * @return void
      */
-    public function __construct()
+    public $userId;
+    public function __construct($userId)
     {
-        //
+        $this->userId = $userId;
     }
 
     /**

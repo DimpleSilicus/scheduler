@@ -41,7 +41,6 @@ class EmailTemplate extends Model
         $arrRequests = self::select('*')
             ->get()
             ->toArray();
-        
         return $arrRequests;
         
     }

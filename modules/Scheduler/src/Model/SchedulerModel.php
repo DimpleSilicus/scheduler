@@ -38,7 +38,7 @@ class Scheduler extends Model
      */
     
     //Scheduler::InsertSchedulerDetails(Auth::id(), $request->schedulerName, $request->schedulerType, $request->schedulerInterval, $request->schedulerDate);
-    public static function InsertSchedulerDetails($userId,$schedulerName,$schedulerType,$schedulerInterval,$schedulerDate,$scheduleTime)
+    public static function InsertSchedulerDetails($userId,$schedulerName,$schedulerType,$schedulerInterval,$scheduleTemplate,$schedulerDate,$scheduleTime)
     {
         $objMember = new self();       
         $objDaily = new self();   
@@ -46,7 +46,8 @@ class Scheduler extends Model
         $objMember->name = $schedulerName;
         $objMember->type = $schedulerType;  //email or batch
         $objMember->interval = $schedulerInterval; //(daily,weekly,monthly)
-        $objMember->start_date = $schedulerDate; //(daily,weekly,monthly)
+        $objMember->template_id = $scheduleTemplate;
+        $objMember->start_date = $schedulerDate; 
         $objMember->end_date = $schedulerDate;         
         $objMember->user_id = $userId;       
         

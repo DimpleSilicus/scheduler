@@ -30,15 +30,11 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 //use Modules\ToolKit\Workshop;
 
 /**
- * SchedulerController class for view method.
+ * SchedulerController class for scheduler functionality.
  *
  * @category SchedulerController
- * @package Activity-Log
- * @author Amol Savat <amol.savat@silicus.com>
- * @license Silicus http://google.com
- * @name ProfileController
- * @version Release:<v.1>
- * @link http://google.com
+ * @author Amol Savat <dimple.agarwal@silicus.com>
+    
  */
 class SchedulerController extends Controller
 {
@@ -93,19 +89,16 @@ class SchedulerController extends Controller
         
         $schedulerDate = date("Y-m-d H:i:s", strtotime($request->schedulerDate));
         $scheduleTime=date("H:i:s", strtotime($request->schedulerDate));
-        $member = Scheduler::InsertSchedulerDetails(Auth::id(), $request->schedulerName, $request->schedulerType, $request->schedulerInterval, $schedulerDate,$scheduleTime);
+        $member = Scheduler::InsertSchedulerDetails(Auth::id(), $request->schedulerName, $request->schedulerType, $request->schedulerInterval, $request->scheduleTemplate,$schedulerDate,$scheduleTime);
         echo "mem::".$member;
     }
     
     public function GetTemplate() {
         
-        $res=EmailTemplate::GetTemplate();
-        
-//        print_r($res);
+        $res=EmailTemplate::GetTemplate();              
         return $res;
     }
-
-
+    
 //    public function getDailyScheduler()
 //    {
 //        $ResDaily=Scheduler::getAllDailySchedulerbyUserId(Auth::id());

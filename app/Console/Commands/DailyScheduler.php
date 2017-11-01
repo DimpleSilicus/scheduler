@@ -9,6 +9,8 @@ use App\Events;
 use App\Events\Event;
 use App\Events\SendMail;
 
+
+
 class DailyScheduler extends Command
 {
     /**
@@ -44,22 +46,28 @@ class DailyScheduler extends Command
     {
 //        DB::table('scheduler')->delete(12);
         $DailyResult=DB::table('scheduler as s')->join('daily_scheduler as ds', 'ds.s_id', '=', 's.id')
-//            ->where('s.user_id', '=', $userId)
             ->get()
             ->toArray();
-        print_r($DailyResult);
-        echo $count=count($DailyResult);
-        for($i=0;$i<=$count;$i++)
+
+        $count=count($DailyResult);
+        for($i=0;$i<$count;$i++)
         {
-            echo $DailyResult[$i]->interval;
-            if($DailyResult[$i]->interval == 'daily') {                
-//                echo "sd";
-//                Event::fire(new ActionDone(1));
-//                Event::fire(new SendMail(1));
-                event(new SendMail(1));
-                
-            }
-                
-        }
-    }
+            if($DailyResult[$i]->interval == 'daily') 
+            {
+                if($DailyResult[$i]->type == 'email')
+                {
+                    $TemplateResult=DB::table('scheduler as s')
+                                    ->leftJoin('email_template as et', 'et.id', '=', 's.id')
+                                    ->get()
+                                    ->toArray();                    
+                    //$output = new \Symfony\Component\Console\Output\ConsoleOutput(2);
+                    //$output->writeln('in handle function');
+                    //This function is used to fire event.
+                    event(new SendMail($DailyResult[$i]->user_id,$TemplateResult[0]->path));                    
+                }
+            }                
+        }        
+       
+    }   
+    
 }

@@ -18,9 +18,8 @@ class SendMailFired
         $user = User::find($event->userId)->toArray();
         
         $messageTemplate['email'] = $user['email'];
-        $messageTemplate['body'] = "Happy diwali";
         
-        Mail::send('welcome', $messageTemplate, function($message) use ($messageTemplate) {
+        Mail::send('emails.'.$event->templatePath, $messageTemplate, function($message) use ($messageTemplate) {
             $message->to($messageTemplate['email']);
             $message->subject('Event Testing');
         });

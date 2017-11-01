@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSchedulerTable extends Migration
+class CreateSchedulerHistoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,10 @@ class CreateSchedulerTable extends Migration
      */
     public function up()
     {
-        Schema::create('scheduler', function (Blueprint $table) {
+        Schema::create('scheduler_history', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('type');
-            $table->string('interval');
-            $table->integer('template_id');
-            $table->dateTime('start_date');
-            $table->dateTime('end_date');
-            $table->integer('user_id');
+            $table->integer('s_id');
+            $table->string('status');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });
@@ -34,6 +29,6 @@ class CreateSchedulerTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('scheduler');
+        Schema::dropIfExists('scheduler_history');
     }
 }

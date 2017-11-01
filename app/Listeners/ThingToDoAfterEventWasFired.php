@@ -6,6 +6,8 @@ use App\Events\ActionDone;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
+use Illuminate\Support\Facades\DB;
+
 class ThingToDoAfterEventWasFired
 {
     /**
@@ -26,10 +28,21 @@ class ThingToDoAfterEventWasFired
      */
     public function handle(ActionDone $event)
     {
-        $user = User::find($event->userId)->toArray();
-        Mail::send('emails.mailEvent', $user, function($message) use ($user) {
-            $message->to($user['email']);
-            $message->subject('Event Testing');
-        });
+        echo "dfsa".$event->userId;
+//        $HistoryResult=DB::table('scheduler_history as sh')
+//            ->get()
+//            ->toArray();
+//        
+//        $objDaily = new self();   
+//        
+//        $objDaily->s_id = $scheduleId;
+//        $objDaily->time_of_day = $scheduleTime;  //email or batch
+//          
+//        
+//        $success = $objDaily->save();
+//        
+//       
+//        return $success;
+//        print_r($HistoryResult);
     }
 }
