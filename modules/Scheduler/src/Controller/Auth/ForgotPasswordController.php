@@ -6,7 +6,7 @@
  * @name       ForgotPasswordController.php
  * @category   Controllers
  * @package    Auth
- * @author     Ajay Bhosale <ajay.bhosale@silicus.com>
+ * @author     Dimple Agarwal <dimple.agarwal@silicus.com>
  * @license    Silicus http://www.silicus.com/
  * @version    GIT: $Id: c8e7553654d1c055d0c5b734ea2d4c858ad92fe5 $
  * @link       None
@@ -28,7 +28,7 @@ use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
  * @name     ForgotPasswordController
  * @category Controller
  * @package  Auth
- * @author   Ajay Bhosale <ajay.bhosale@silicus.com>
+ * @author   Dimple Agarwal <dimple.agarwal@silicus.com>
  * @license  Silicus http://www.silicus.com/
  * @version  Release:<v.1>
  * @link     None
@@ -64,7 +64,7 @@ use SendsPasswordResetEmails;
      *
      * @name   __construct
      * @access public
-     * @author Ajay Bhosale <ajay.bhosale@silicus.com>
+     * @author Dimple Agarwal <dimple.agarwal@silicus.com>
      *
      * @return Illuminate\Http\Response
      */

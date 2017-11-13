@@ -13,10 +13,11 @@ class ActionDone extends Event {
      *
      * @return void
      */
-    public $userId;
-    public function __construct($userId)
+    public $SchedulerId,$status;
+    public function __construct($SchedulerId,$status)
     {
-        $this->userId = $userId;
+        $this->SchedulerId = $SchedulerId;
+        $this->status = $status;
     }
 
     /**

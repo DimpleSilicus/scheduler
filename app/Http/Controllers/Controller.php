@@ -6,11 +6,9 @@
  * @name       AuthController.php
  * @category   Controllers
  * @package    Auth
- * @author     Ajay Bhosale <ajay.bhosale@silicus.com>
+ * @author     Dimple Agarwal <dimple.agarwal@silicus.com>
  * @license    Silicus http://www.silicus.com/
- * @version    GIT: $Id: 6fa4faa9e141a6d2c42512b0e18160e04fe6567e $
- * @link       None
- * @filesource
+
  */
 namespace App\Http\Controllers;
 
@@ -30,7 +28,7 @@ use Modules\ToolKit\Workshop;
  * @name     AuthController
  * @category Controller
  * @package  Auth
- * @author   Ajay Bhosale <ajay.bhosale@silicus.com>
+ * @author   Dimple Agarwal <dimple.agarwal@silicus.com>
  * @license  Silicus http://www.silicus.com/
  * @version  Release:<v.1>
  * @link     None
@@ -61,7 +59,7 @@ class Controller extends BaseController
      *
      * @name   __construct
      * @access public
-     * @author Ajay Bhosale <ajay.bhosale@silicus.com>
+     * @author Dimple Agarwal <dimple.agarwal@silicus.com>
      *
      * @return \Illuminate\Contracts\Validation\Validator
      */
@@ -76,7 +74,7 @@ class Controller extends BaseController
      *
      * @name   loadJsCSS
      * @access public
-     * @author Ajay Bhosale <ajay.bhosale@silicus.com>
+     * @author Dimple Agarwal <dimple.agarwal@silicus.com>
      *
      * @param array $js  description
      * @param array $css description
@@ -92,64 +90,5 @@ class Controller extends BaseController
         if (is_array($css)) {
             view()->share('cssFiles', $css);
         }
-    }
-
-    /**
-     * Create object of Modules\ToolKit\Seo
-     *
-     * @name   seo
-     * @access public
-     * @author Ajay Bhosale <ajay.bhosale@silicus.com>
-     *
-     * @return object Modules\ToolKit\Seo
-     */
-    public function seo()
-    {
-        return app('seo');
-    }
-
-    /**
-     * Set application meta-data
-     *
-     * @name   addMetadata
-     * @access public
-     * @author Ajay Bhosale <ajay.bhosale@silicus.com>
-     *
-     * @param array $metadata description
-     *
-     * @return void
-     */
-    public function addMetadata($metadata)
-    {
-        if (isset($metadata['title'])) {
-            $this->seo()->setTitle($metadata['title']);
-        }
-        
-        if (isset($metadata['description'])) {
-            $this->seo()->setDescription($metadata['description']);
-        }
-        
-        if (isset($metadata['keywords'])) {
-            $this->seo()->setKewords($metadata['keywords']);
-        }
-    }
-
-    /**
-     * Add to log
-     *
-     * @name   addToLog
-     * @access public static
-     * @author Ajay Bhosale <ajay.bhosale@silicus.com>
-     *
-     * @param string $message Log message
-     * @param string $module  Module name
-     * @param string $type    Type of error log emergency, alert, critical, error, warning, notice, info and debug
-     * @param array  $details Message details
-     *
-     * @return void
-     */
-    public function addToLog($message, $module = 'general', $type = 'error', $details = [])
-    {
-        Workshop::addLog($message, $module, $type, $details);
     }
 }

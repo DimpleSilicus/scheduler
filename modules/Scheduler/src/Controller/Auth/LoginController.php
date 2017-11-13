@@ -6,7 +6,7 @@
  * @name       LoginController.php
  * @category   Controllers
  * @package    Auth
- * @author     Ajay Bhosale <ajay.bhosale@silicus.com>
+ * @author     Dimple Agarwal <dimple.agarwal@silicus.com>
  * @license    Silicus http://www.silicus.com/
  * @version    GIT: $Id: c8e7553654d1c055d0c5b734ea2d4c858ad92fe5 $
  * @link       None
@@ -29,7 +29,7 @@ use Modules\Profile\Controller\ProfileController;
  * @name LoginController
  * @category Controller
  * @package Auth
- * @author Ajay Bhosale <ajay.bhosale@silicus.com>
+ * @author Dimple Agarwal <dimple.agarwal@silicus.com>
  * @license Silicus http://www.silicus.com/
  * @version Release:<v.1>
  * @link None
@@ -79,7 +79,7 @@ class LoginController extends Controller
      *
      * @name showLoginForm
      * @access public
-     * @author Ajay Bhosale <ajay.bhosale@silicus.com>
+     * @author Dimple Agarwal <dimple.agarwal@silicus.com>
      *
      * @return void
      */
@@ -100,7 +100,7 @@ class LoginController extends Controller
      *
      * @name authenticated
      * @access protected
-     * @author Ajay Bhosale <ajay.bhosale@silicus.com>
+     * @author Dimple Agarwal <dimple.agarwal@silicus.com>
      *
      * @param Array $request
      *            Request
@@ -175,7 +175,7 @@ class LoginController extends Controller
      *
      * @name adminLogout
      * @access public
-     * @author Ajay Bhosale <ajay.bhosale@silicus.com>
+     * @author Dimple Agarwal <dimple.agarwal@silicus.com>
      *
      * @return void
      */

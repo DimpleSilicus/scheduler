@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSchedulerHistoryTable extends Migration
+class CreateWeeklyMonthlyTimeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateSchedulerHistoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('scheduler_history', function (Blueprint $table) {
+        Schema::create('weekly_monthly_time', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('s_id');
-            $table->integer('status');
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamps();
         });
     }
 
@@ -29,6 +26,6 @@ class CreateSchedulerHistoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('scheduler_history');
+        Schema::dropIfExists('weekly_monthly_time');
     }
 }

@@ -30,34 +30,29 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected function schedule(Schedule $schedule)
-    {
-        // $schedule->command('inspire')
-        //          ->hourly();
-        echo 'here---------------------------';       
-           
-        //Commented for now.
-        $DailyResult=DB::table('scheduler as s')
-            ->get()
-            ->toArray();
-//        print_r($DailyResult);
+    {        
+        $DailyResult=DB::table('scheduler as s')    
+                ->select('*', 's.id as sid')
+                ->join('daily_scheduler as ds', 'ds.s_id', '=', 's.id')
+                ->where('s.status','=','1')
+                ->get()
+                ->toArray();
         $count=count($DailyResult);
         for($i=0;$i<$count;$i++)
         {
+            $finalResDaily=$DailyResult[$i];
             if($DailyResult[$i]->interval == 'daily') 
             {
-                 $schedule->command('DailyScheduler:dailyschedule')
+                 $schedule->command('DailyScheduler:dailyschedule '.$DailyResult[$i]->interval.' '.$DailyResult[$i]->type.' '.$DailyResult[$i]->user_id.' '. $DailyResult[$i]->template_id)
                  ->everyMinute()
-                ->after(function() {
+                ->after(function() use ($finalResDaily) {
                     // Task is complete...
-                        event(new ActionDone(1));                          
+                        event(new ActionDone($finalResDaily->sid,1));                          
                });
+               //For running scheduler on daily basis.
+//                ->dailyAt($DailyResult[$i]->time_of_day);
             }
         }
-        
-       
-//        print_r($res);
-//                ->dailyAt('13:00');
-        
     }
 
     /**

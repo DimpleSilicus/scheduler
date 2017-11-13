@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDailySchedulerTable extends Migration
+class CreateTimeOfSchedulerTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateDailySchedulerTable extends Migration
      */
     public function up()
     {
-        Schema::create('daily_scheduler', function (Blueprint $table) {
+        Schema::create('time_of_scheduler', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('s_id');
-            $table->time('time_of_day');            
+            $table->integer('s_id'); //FK of master table scheduler.
+            $table->integer('w_id'); //FK of table weekly_scheduler.(this is extra for now)
+            $table->time('time');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
             $table->softDeletes();
@@ -30,6 +31,6 @@ class CreateDailySchedulerTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('daily_scheduler');
+        Schema::dropIfExists('time_of_scheduler');
     }
 }

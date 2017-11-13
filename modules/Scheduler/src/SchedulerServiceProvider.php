@@ -59,7 +59,7 @@ class SchedulerServiceProvider extends ServiceProvider
     {
         // get theme name
        
-       $theme = Config::get('app.theme');
+       
         
         // set theme path
         $this->loadViewsFrom(__DIR__ . '/Views/', 'Scheduler');

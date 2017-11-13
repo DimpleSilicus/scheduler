@@ -14,11 +14,22 @@
 namespace Modules\Scheduler\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
+
+
+/**
+ * EmailTemplate class to get template detail.
+ *
+ * @category EmailTemplate
+ * @package EmailTemplate
+ * @author Dimple Agarwal <dimple.agarwal@silicus.com>
+ * @license Silicus http://google.com
+ * @name EmailTemplate
+ * @version 
+ * @link http://google.com
+ */
 
 class EmailTemplate extends Model
 {
-
     protected $primaryKey = 'id';
 
     protected $table = 'email_template';
@@ -26,25 +37,31 @@ class EmailTemplate extends Model
     public $timestamps = false;
 
     /**
-     * Function to add user privacy settings
+     * Function to get email template.
      *
-     * @name InsertSchedulerDetails
+     * @name GetTemplate
      * @access public
      * @author Dimple Agarwal<dimple.agarwal@silicus.com>
      *
-     * @return void
+     * @return array
      */
-    
-    //Scheduler::InsertSchedulerDetails(Auth::id(), $request->schedulerName, $request->schedulerType, $request->schedulerInterval, $request->schedulerDate);
-    public static function GetTemplate()
-    {       
-        $arrRequests = self::select('*')
+
+    public static function GetTemplate($template_id=NULL)
+    {   
+        if($template_id!= NULL)
+        {            
+            $arrRequests = self::select('*')
+            ->where('email_template.id','=',$template_id)
             ->get()
             ->toArray();
+        }
+        else
+        {
+           $arrRequests = self::select('*')
+                                ->get()
+                                ->toArray();
+        }
+            
         return $arrRequests;
-        
-    }
-
-       
-       
+    } 
 }

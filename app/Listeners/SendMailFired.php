@@ -14,14 +14,14 @@ class SendMailFired
         
     }
     public function handle(SendMail $event)
-    {
+    {        
         $user = User::find($event->userId)->toArray();
         
         $messageTemplate['email'] = $user['email'];
         
         Mail::send('emails.'.$event->templatePath, $messageTemplate, function($message) use ($messageTemplate) {
             $message->to($messageTemplate['email']);
-            $message->subject('Event Testing');
+            $message->subject('Event');
         });
     }
 }

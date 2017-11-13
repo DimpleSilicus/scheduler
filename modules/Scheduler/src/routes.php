@@ -13,22 +13,7 @@
  * @filesource
  */
 
-Route::group([
-    'middleware' => [
-        'web',
-        'guest'
-    ],
-    'namespace' => 'Modules\Scheduler\Controller'
-], function () {
-    // Route::get('/login', 'Auth\LoginController@showLoginForm');
-    
-    
-    //Route::get('/', 'SchedulerController@showMainPage');
-    //Route::post('/login', 'Auth\LoginController@login');    
-        
-    
-    
-});
+
 Route::group([
     'middleware' => [
         'web',
@@ -38,9 +23,34 @@ Route::group([
     'namespace' => 'Modules\Scheduler\Controller'
 ], function () {
     
-//    Route::get('home', 'SchedulerController@showHomePage');
+    Route::get('/', 'SchedulerController@test');
     Route::get('/schedulerHome', 'SchedulerController@showHomePage');
-    Route::post('/add_scheduler', 'SchedulerController@AddDailyScheduler');
+    Route::post('/add_scheduler', 'SchedulerController@AddDailyScheduler'); 
     
-    Route::post('get_template', 'SchedulerController@GetTemplate');
+    //route to edit scheduler.
+    Route::post('/edit_scheduler', 'SchedulerController@EditScheduler'); 
+    
+    Route::post('get_template', 'SchedulerController@GetTemplate');    
+    //Route for delete scheduler.
+    Route::post('/deleteScheduler', 'SchedulerController@DeleteScheduler');
+    
+    //Route for edit shceduler.
+    Route::post('/getSchedulerDetails', 'SchedulerController@getSchedulerDetailsBySchedulerId'); 
+    
 });
+
+Route::group([
+    'middleware' => [
+        'web',
+        'guest'
+    ],
+    
+    'namespace' => 'Modules\Scheduler\Controller'
+], function () {
+    
+    Route::get('/', 'SchedulerController@test');
+//    Route::get('/schedulerHome', 'SchedulerController@showHomePage');
+    
+    
+});
+

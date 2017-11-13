@@ -6,7 +6,7 @@
     <body>
         <div>
             <h4>
-                {{$body}}  
+                Happy Holi To All.....!!!!!!!
             </h4>
         </div>
     </body>

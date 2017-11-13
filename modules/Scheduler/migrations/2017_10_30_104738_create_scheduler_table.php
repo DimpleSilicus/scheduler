@@ -22,8 +22,13 @@ class CreateSchedulerTable extends Migration
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->integer('user_id');
+            $table->enum('status', [
+                0,
+                1
+            ])->default(1);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
+            $table->softDeletes();
         });
     }
 

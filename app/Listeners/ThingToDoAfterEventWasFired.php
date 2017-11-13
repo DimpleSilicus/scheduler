@@ -28,21 +28,9 @@ class ThingToDoAfterEventWasFired
      */
     public function handle(ActionDone $event)
     {
-        echo "dfsa".$event->userId;
-//        $HistoryResult=DB::table('scheduler_history as sh')
-//            ->get()
-//            ->toArray();
-//        
-//        $objDaily = new self();   
-//        
-//        $objDaily->s_id = $scheduleId;
-//        $objDaily->time_of_day = $scheduleTime;  //email or batch
-//          
-//        
-//        $success = $objDaily->save();
-//        
-//       
-//        return $success;
-//        print_r($HistoryResult);
+        $objDaily['s_id'] = $event->SchedulerId;
+        $objDaily['status'] = $event->status;  //email or batch
+          
+        DB::table('scheduler_history')->insert($objDaily);
     }
 }
