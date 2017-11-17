@@ -22,7 +22,7 @@
                 <th>Name</th>
                 <th>Time</th>
                 <th>Interval</th>
-                <th>Status</th>
+                <!--<th>Status</th>-->
                 <th>Action</th>
             </tr>
 
@@ -35,7 +35,7 @@
                 <td>{{$request['name']}}</td>
                 <td>{{$request['time_of_day']}}</td>
                 <td>{{$request['interval']}}</td>
-                <td>{{ isset($request['status']) ? $request['status'] == 1 ? 'Active' : 'Deleted' : 'N/A'}}</td>
+                <!--<td>{{ isset($request['status']) ? $request['status'] == 1 ? 'Active' : 'Deleted' : 'N/A'}}</td>-->
                 <td>
 
                     <div>
@@ -43,7 +43,7 @@
                         <a href="#" id="editScheduler" schedulerId={{$request['sid']}} class="table-icon">                                                           
                             <span class="glyphicon glyphicon-edit"></span>                           
                         </a>
-                        <a href="#" id="deleteScheduler" class="table-icon" onclick="deleteScheduler()" >
+                        <a href="#" id="deleteScheduler" class="table-icon" onclick="deleteScheduler({{$request['sid']}})" >
 
                             <!--<button type="submit" class="btn btn-default btn-sm deleteScheduler">-->
                             <span class="glyphicon glyphicon-trash"></span>  
@@ -58,6 +58,54 @@
 
         </tbody>
     </table>
+    
+    <div>
+        <a href="#history" class="btn btn-info" data-toggle="collapse" aria-expanded="false" aria-controls="history">History</a>
+        <div id="history" class="collapse">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+<!--                    <th>Interval</th>-->
+                    <!--<th>Status</th>-->
+                    <!--<th>Action</th>-->
+                </tr>
+            </thead>
+            <tbody>
+            @if (count($HistoryResult) > 0)
+            @foreach ($HistoryResult as $request)
+            <tr>
+                <td>{{$request['name']}}</td>
+                <td>{{ isset($request['status']) ? $request['status'] == 1 ? 'Success' : 'Fail' : 'N/A'}}</td>
+                <!--<td>{{$request['interval']}}</td>-->
+                
+<!--                <td>
+                    <div>                        
+                        <a href="#" id="editScheduler" schedulerId={{$request['sid']}} class="table-icon">                                                           
+                            <span class="glyphicon glyphicon-edit"></span>                           
+                        </a>
+                        <a href="#" id="deleteScheduler" class="table-icon" onclick="deleteScheduler()" >
+                            <span class="glyphicon glyphicon-trash"></span>  
+                        </a>
+                    </div>
+                </td>-->
+            </tr>
+            @endforeach
+
+            @endif
+
+        </tbody>
+            
+        </table>
+        </div>
+<!--  <div id="demo" class="collapse">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+  </div>-->
+</div>
+    </div>
 </div>
 
 
@@ -123,7 +171,7 @@
                                 <h5>Scheduler Interval *</h5>
 
                                 <div class="input-group width-100Per">
-                                    <select class="form-control has-info" id="schedulerInterval" name="schedulerInterval" onchange="GetSchedulerTime(this.value)" placeholder="Placeholder" required>
+                                    <select class="form-control has-info" id="schedulerInterval" name="schedulerInterval" onchange="GetSchedulerTime(this.value,'add')" placeholder="Placeholder" required>
                                         <option selected="selected" value="">Select Interval</option>                                        
                                         <option value="daily">Daily</option>
                                         <option value="weekly">Weekly</option>
@@ -174,6 +222,7 @@
 
                                 <div class="clearfix"></div>
                                 <div class="modal-footer margin-T-40">
+                                    <!--<input type="text" name="date" id='date'/>-->
                                     <input type="hidden" name="type" id="type" value="add"/>
                                     <button type="submit" class="btn btn-raised btn-green pull-right">Add</button>
                                     <button type="submit" class="btn btn-raised btn-default pull-right margin-R-20" data-dismiss="modal" >Cancel</button>
@@ -246,7 +295,7 @@
                             <h5>Scheduler Interval *</h5>
 
                             <div class="input-group width-100Per">
-                                <select class="form-control has-info" id="schedulerIntervalU" name="schedulerIntervalU" onchange="GetSchedulerTime(this.value)" placeholder="Placeholder" required>
+                                <select class="form-control has-info" id="schedulerIntervalU" name="schedulerIntervalU" onchange="GetSchedulerTime(this.value,'edit')" placeholder="Placeholder" required>
                                     <option selected="selected" value="">Select Interval</option>                                        
                                     <option value="daily">Daily</option>
                                     <option value="weekly">Weekly</option>
@@ -262,7 +311,7 @@
                                 <h5>Scheduler Time *</h5>
                                 <div class="row editTime">
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control" id="schedulerDateMultiple" name="schedulerDateMultiple" value=""/>
+                                            <input type="text" class="form-control" id="schedulerDateMultiplenew" name="schedulerDateMultiplenew" value=""/>
 
                                             <span class="form-highlight"></span>
                                             <span class="form-bar"></span>
@@ -298,8 +347,7 @@
                 </div>
 
                 <div class="clearfix"></div>
-                <div class="modal-footer margin-T-40">
-
+                <div class="modal-footer margin-T-40">                    
                     <button type="submit" class="btn btn-raised btn-green pull-right">Update</button>
                     <button type="submit" class="btn btn-raised btn-default pull-right margin-R-20" data-dismiss="modal" >Cancel</button>
                 </div>
@@ -310,7 +358,7 @@
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.0/js/bootstrap-datepicker.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/js/bootstrap-dialog.min.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/js/bootstrap-dialog.min.js"></script>-->
 @if(isset($jsFiles))
 @foreach($jsFiles as $src)
 <script src="{{$src}}{{$jsTimeStamp}}"></script>

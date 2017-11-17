@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateWeeklyMonthlyTimeTable extends Migration
+class CreateSchedulerIntervalTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateWeeklyMonthlyTimeTable extends Migration
      */
     public function up()
     {
-        Schema::create('weekly_monthly_time', function (Blueprint $table) {
-//            $table->increments('id');
-            $table->integer('wm_id'); //weekly_scheduler table id as FK
-            $table->integer('t_id'); //time_of_scheduler table id as FK.
+        Schema::create('scheduler_interval', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('s_id'); //FK of master table scheduler.
+            $table->time('time');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
             $table->softDeletes();
@@ -30,6 +30,6 @@ class CreateWeeklyMonthlyTimeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('weekly_monthly_time');
+        Schema::dropIfExists('scheduler_interval');
     }
 }

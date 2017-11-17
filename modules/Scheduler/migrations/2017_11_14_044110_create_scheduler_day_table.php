@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateWeeklySchedulerTable extends Migration
+use Illuminate\Support\Facades\DB;
+
+class CreateSchedulerDayTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +15,17 @@ class CreateWeeklySchedulerTable extends Migration
      */
     public function up()
     {
-        Schema::create('weekly_scheduler', function (Blueprint $table) {
+        Schema::create('scheduler_day', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('s_id');
-            $table->string('day_of_week');
+            $table->string('s_day');
+            $table->integer('month');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
             $table->softDeletes();
         });
+        
+        DB::statement('ALTER TABLE scheduler_day ADD year YEAR' );
     }
 
     /**
@@ -30,6 +35,6 @@ class CreateWeeklySchedulerTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('weekly_scheduler');
+        Schema::dropIfExists('scheduler_day');
     }
 }

@@ -17,8 +17,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Scheduler\Model\Scheduler;
-use Modules\Scheduler\Model\DailyScheduler;
+//use Modules\Scheduler\Model\DailyScheduler;
+use Modules\Scheduler\Model\SchedulerTime;
 use Modules\Scheduler\Model\EmailTemplate;
+use Modules\Scheduler\Model\SchedulerDay;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 use Carbon\Carbon;
@@ -55,6 +57,7 @@ class SchedulerController extends Controller
         
         $jsFiles[]  = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js";
         $cssFiles[] = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css";
+        $jsFiles[]="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.0/js/bootstrap-datepicker.js";
         $this->loadJsCSS($jsFiles, $cssFiles);
     }
     
@@ -71,8 +74,9 @@ class SchedulerController extends Controller
     public function showHomePage() {
 
         $allSchedulerResult=Scheduler::getAllDailySchedulerbyUserId(Auth::id());
-        
-        return view('Scheduler::scheduler_home')->with('allSchedulerResult', $allSchedulerResult);
+        $HistoryResult=Scheduler::getHistory(Auth::id());        
+        return view('Scheduler::scheduler_home')->with('allSchedulerResult', $allSchedulerResult)
+                ->with('HistoryResult', $HistoryResult);
         
     }
     
@@ -101,9 +105,8 @@ class SchedulerController extends Controller
             'schedulerType.required' => 'Scheduler Type is required.',
             'schedulerInterval.required' => 'Scheduler Interval is required.',
             'scheduleTemplate.required' => 'Scheduler Template is required.',
-//            'schedulerDateMultiple.*.profile'=>[
-//                'required' => 'Scheduler Time is required.',
-//                ]
+            'schedulerDateMultiple.required'=> 'Please add time.',
+                
             
 //            'schedulerDate.required' => 'Scheduler Date is required.'            
         ];
@@ -113,7 +116,7 @@ class SchedulerController extends Controller
             'schedulerType' => 'required',
             'schedulerInterval' => 'required',
             'scheduleTemplate' => 'required',
-//            'schedulerDateMultiple.profile'=>'required'
+            'schedulerDateMultiple'=>'required'
 //            'schedulerFromDate' => 'date|after:tomorrow|date_format:Y-m-d',
         
         ], $messages);
@@ -158,6 +161,11 @@ class SchedulerController extends Controller
         {
             $schedulerDetail['day']=$request->day;
         }
+        elseif($request->schedulerInterval == 'monthly')
+        {
+            $schedulerDetail['day']=$request->day;
+            $schedulerDetail['month']=$request->month;
+        }
 
         
         $member = Scheduler::InsertSchedulerDetails(Auth::id(),$schedulerDetail);
@@ -197,6 +205,7 @@ class SchedulerController extends Controller
      * @return void
      */
     public function DeleteScheduler(Request $request) {
+        
 //        echo "DeleteScheduler".$request->schedulerId;
         //Return boolean value.
         $delete = Scheduler::deleteSchedulerBySchedulerId($request->schedulerId);
@@ -231,7 +240,9 @@ class SchedulerController extends Controller
         ], $messages);
         
         $schDetails['schedular'] = Scheduler::getSchedulerById($request->schedulerId);
-        $schDetails['daily_schedular'] = DailyScheduler::getDailySchedulerBySchedulerId($request->schedulerId);
+        $schDetails['daily_schedular'] = SchedulerTime::getIntervalBySchedulerId($request->schedulerId);
+        $schDetails['scheduler_interval']= SchedulerDay::getDayBySchedulerId($request->schedulerId);
+//        $schDetails['daily_schedular'] = DailyScheduler::getDailySchedulerBySchedulerId($request->schedulerId);
         
         return response()->json($schDetails);
     }
@@ -239,7 +250,7 @@ class SchedulerController extends Controller
     
     public function EditScheduler(Request $request) {
         
-//        dd($request->schedulerDateMultiple);
+//        dd($request->day);
         
 
         // validate inputs
@@ -289,24 +300,34 @@ class SchedulerController extends Controller
         $schedulerDetail['schedulerFromDate']=$schedulerFromDate;
         $schedulerDetail['schedulerToDate']=$schedulerToDate;        
         $schedulerDetail['schedulerDateMultiple']= $request->schedulerDateMultiple;
-        $schedulerDetail['schedulerDateMultipleEdit']= array_filter($request->schedulerDateMultipleEdit);
+        if(!empty($request->schedulerDateMultipleEdit))
+        {
+            $schedulerDetail['schedulerDateMultipleEdit']= array_filter($request->schedulerDateMultipleEdit);
+        }
+        else
+        {
+            $schedulerDetail['schedulerDateMultipleEdit']=array();
+        }
         
         $schedulerDetail['schedulerInterval']=$request->schedulerIntervalU;
-//        $schedulerDetail['scheduleTemplate']=$request->scheduleTemplate;
-//        $schedulerDetail['schedulerDate']=$schedulerDate;
-//        $schedulerDetail['scheduleTime']=$scheduleTime;
         
+        if($request->schedulerIntervalU == 'weekly')
+        {            
+            $schedulerDetail['day']=$request->day;
+            $schedulerDetail['dayEdit']=$request->dayEdit;
+        }
+        elseif($request->schedulerIntervalU == 'monthly')
+        {
+            $schedulerDetail['day']=$request->day;
+            $schedulerDetail['dayEdit']=$request->dayEdit;
+            $schedulerDetail['month']=$request->month;
+        }
+//        dd($schedulerDetail);
         // update picture details
-        echo $update = Scheduler::UpdateSchedulerDetails(Auth::id(),$schedulerDetail);
+        $update = Scheduler::UpdateSchedulerDetails(Auth::id(),$schedulerDetail);
         
         if ($update) {
             \Session::flash('success', 'Scheduler Updated successfully.');
         }
-    }
-    
-    public function test()
-    {
-//        return "hello there";
-        return view('Scheduler::test');
-    }
+    }        
 }

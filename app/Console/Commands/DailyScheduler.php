@@ -17,7 +17,7 @@ class DailyScheduler extends Command {
      *
      * @var string
      */
-    protected $signature = 'DailyScheduler:dailyschedule {interval} {type} {userId} {templateId}';
+    protected $signature = 'DailyScheduler:dailyschedule {userId} {templateId}';
 
     /**
      * The console command description.
@@ -43,29 +43,16 @@ class DailyScheduler extends Command {
     public function handle()
     {                
 //        Log::info('Showing user profile for user'.$this->argument('templateId'));
-        $interval=$this->argument('interval');
-        $type=$this->argument('type');
+
         $user_id=$this->argument('userId');
         $templateId=$this->argument('templateId');
-        
-//        $count=count($DailyResult);
-//        for($i=0;$i<$count;$i++)
-//        {
-            if($interval == 'daily') 
-            {
-                if($type == 'email')
-                {
-                    $TemplateResult=DB::table('scheduler as s')
-                                    ->leftJoin('email_template as et', 'et.id', '=', 's.template_id')
-                                    ->where('s.template_id','=',$templateId)
-                                    ->get()
-                                    ->toArray();
+        $TemplateResult=DB::table('email_template as et')
+//                                    ->leftJoin('email_template as et', 'et.id', '=', 's.template_id')
+                      ->where('et.id','=',$templateId)
+                      ->get()
+                      ->toArray();
                     //This function is used to fire event.
-                    event(new SendMail($user_id,$TemplateResult[0]->path));                    
-                }
-            }                
-//        }        
-       
+                    event(new SendMail($user_id,$TemplateResult[0]->path));
     }   
     
 

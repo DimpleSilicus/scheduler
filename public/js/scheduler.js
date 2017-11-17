@@ -56,11 +56,11 @@ $(document).ready(function () {
                         $("#addScheduler #scheduleTemplate-div").addClass("has-error");
                         $('#addScheduler #form-errors-scheduleTemplate').html(obj.errors.scheduleTemplate[0]);
                     }
-//                    if (obj.errors.schedulerDateMultiple) {
-//                        alert(obj.errors.schedulerDateMultiple[0]);
-//                        $("#addScheduler #schedulerDate-div").addClass("has-error");
-//                        $('#addScheduler #form-errors-schedulerDate').html(obj.errors.schedulerDateMultiple[0]);
-//                    }
+                    if (obj.errors.schedulerDateMultiple) {
+                        alert(obj.errors.schedulerDateMultiple[0]);
+                        $("#addScheduler #schedulerDateMultiple-div").addClass("has-error");
+                        $('#addScheduler #form-errors-schedulerDateMultiple').html(obj.errors.schedulerDateMultiple[0]);
+                    }
                     if (obj.errors.schedulerDate) {
                         alert(obj.errors.schedulerDate[0]);
                         $("#addScheduler #schedulerDate-div").addClass("has-error");
@@ -139,9 +139,10 @@ $(document).ready(function () {
 	});
         
     function manageEvent(modalName){
-        if('' == $(modalName+" #schedulerDateMultiple").val()) return false;
         
-        var time = $(modalName+" #schedulerDateMultiple").val();
+        if('' == $(modalName+" #schedulerDateMultiplenew").val()) return false;
+        
+        var time = $(modalName+" #schedulerDateMultiplenew").val();
         var row = addTimeRow('', time);
         if(time == '')
         {
@@ -152,27 +153,6 @@ $(document).ready(function () {
             $(modalName+" #eventRows").append(row);
         }
     }
-    
-    //For validating checkbox field.
-//    $('#frmAddScheduler').validate({ // initialize the plugin
-//        rules: {
-//            'day[]': {
-//                required: true,
-//                maxlength: 2
-//            }
-//        },
-//        messages: {
-//            'day[]': {
-//                required: "You must check at least 1 day",
-//                maxlength: "Check no more than {0} boxes"
-//            }
-//        },
-//        submitHandler: function (form) { // for demo
-//            alert('valid form submitted'); // for demo
-//            return false; // for demo
-//        }
-//    });
-    
 });
 
 //For appending new time row on click of plus button.
@@ -222,52 +202,82 @@ function showTemplate(schedule_type)
         }
     });
 }
-function GetSchedulerTime(scheduler_interval)
+function GetSchedulerTime(scheduler_interval,type)
 {
+//    var type=$('#type').val();    
     if (scheduler_interval == 'daily')
     {
 //        $('#schedulerDate').css('display', 'block');
-        var html= getTime();
-        $('#schedulerDate').html(html);
+        var html;
+        if(type=='add')
+        {
+            html= getTime();
+            $('#schedulerDate').html(html);
+        }
+        else
+        {
+            html= getTime('editTime-ico-plus');
+            $('#schedulerDateU').html(html);
+        }
     }
     //This is in progress Code
     else if (scheduler_interval == 'weekly')
      {
-     alert('weekly');
-     var daysOfWeekHtml = gernerateDayofWeek();
-     var timeHtml=getTime();
-     $('#schedulerDate').html(daysOfWeekHtml);
-     $('#schedulerDate').append(timeHtml);
-//     $('#DynamicData').css('display', 'block');
+         
+        var daysOfWeekHtml = gernerateDayofWeek();
+        var timeHtml;
+        if(type=='add')
+        {
+            var timeHtml=getTime();
+            $('#schedulerDate').html(daysOfWeekHtml);
+            $('#schedulerDate').append(timeHtml);
+        }
+        else
+        {
+            var timeHtml=getTime('editTime-ico-plus');
+            $('#schedulerDateU').html(daysOfWeekHtml);
+            $('#schedulerDateU').append(timeHtml);
+        }
+        
+   //     $('#DynamicData').css('display', 'block');
      } 
      
-     /*else if (scheduler_interval == 'monthly')
+     else if (scheduler_interval == 'monthly')
      {
-     alert('monthly');
-     var daysOfWeekHtml = gernerateDayofMonth();
-     $('#schedulerDate').html(daysOfWeekHtml);
-     }*/
+        var month;
+//        var daysOfWeekHtml = gernerateDayofMonth();
+        if(type=='add')
+        {
+            var month =generateMonth('add');
+            $('#schedulerDate').html(month);
+        }
+        else
+        {
+            var month =generateMonth('edit');
+            $('#schedulerDateU').html(month);
+        }
+        
+     }
 }
 
-$('#schedulerDate').click(function () {
-    $("#schedulerDate").datepicker({
-        changeMonth: true,
-        changeYear: true
+$('#date').click(function () {
+//    alert('date');
+    $("#date").datepicker({
+//        changeMonth: true,
+//        changeYear: true
     });
 });
 
 //Function is to delete perticuler scheduler.
-function deleteScheduler()
+function deleteScheduler(schedulerid)
 {
-    var schedulerId = $("#schedulerId").val();
-
     if (window.confirm("Are you sure you want to delete this scheduler?"))
     {
         $.ajax({
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             url: '/deleteScheduler',
             type: 'POST',
-            data: {schedulerId: schedulerId},
+            data: {schedulerId: schedulerid},
             success: function () {
                 location.reload();
             },
@@ -283,13 +293,10 @@ function deleteScheduler()
 
 //Function is to get scheduler details.
 $(document).on("click", "#editScheduler", function () {
-//function editScheduler()
-//{
-    
-    $('#editSchedulerPopup').modal('show');
-//    var schedulerId = $("#schedulerId").val();
+
+    $("#editSchedulerPopup #eventRows").html('');
+    $('#editSchedulerPopup').modal('show');    
     var schedulerId = $(this).attr("schedulerId");
-//    alert('editScheduler'+schedulerId);
     $.ajax({
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         url: '/getSchedulerDetails',
@@ -298,10 +305,25 @@ $(document).on("click", "#editScheduler", function () {
         success: function (data) {
             console.log(data);
             $.each(data["daily_schedular"],function(i, value){   
-                var row=addTimeRow(i, value.time_of_day);
+                var row=addTimeRow(i, value.time);
                 $("#editSchedulerPopup #eventRows").append(row);
             });
-            
+            if(data['schedular'].interval=='weekly')
+            {
+                 var daysHtml= gernerateDayofWeek(data["scheduler_interval"]);
+                $("#editSchedulerPopup #eventRows").append(daysHtml);
+            }
+            else if(data['schedular'].interval=='monthly')
+            {
+                var key;
+                var monthHtml= generateMonth('edit',data["scheduler_interval"]);
+                $.each(data["scheduler_interval"],function(keys,value){                    
+                    key=keys;
+                });
+                var daysOfMonthHtml=gernerateDayofMonth(data["scheduler_interval"][key]['month'],'edit',data["scheduler_interval"]);
+                $("#editSchedulerPopup #eventRows").append(monthHtml);
+                $("#editSchedulerPopup #eventRows").append(daysOfMonthHtml);
+            }
             $("#editSchedulerPopup #schedulerNameU").val(data['schedular'].name);
             $("#editSchedulerPopup #schedulerTypeU").val(data['schedular'].type);
             //Not showing which template is selected for now. i will fix it later.
@@ -320,48 +342,122 @@ $(document).on("click", "#editScheduler", function () {
 });
 
 //Function is to get common time text field
-function getTime()
+function getTime(id)
 {
-    var html='<h5>Scheduler Time *</h5><div class="row"><div class="col-sm-6"><input type="text" class="form-control" id="schedulerDateMultiple" name="schedulerDateMultiple[]" value="" required/><span class="form-highlight"></span><span class="form-bar"></span><span class="text-danger" id="schedulerDate-div"><strong id="form-errors-schedulerDate"></strong></span></div><div class="col-sm-1"><!--plus button come here--><a href="#" id="addDateTime-ico-plus" class="table-icon"><span class="glyphicon glyphicon-plus"></span></a></div></div><div id="eventRows"></div>';
+    var addclass;
+    //For addDateTime-ico-plus
+    if(typeof id != 'undefined')
+    {        
+        addclass=id;
+    }
+    //For editTime-ico-plus
+    else
+    {
+        addclass='addDateTime-ico-plus';
+    }
+    var html='<h5>Scheduler Time *</h5><div class="row"><div class="col-sm-6"><input type="text" class="form-control" id="schedulerDateMultiplenew" name="schedulerDateMultiplenew[]" value="" required/><span class="form-highlight"></span><span class="form-bar"></span><span class="text-danger" id="schedulerDateMultiple-div"><strong id="form-errors-schedulerDateMultiple"></strong></span></div><div class="col-sm-1"><!--plus button come here--><a href="#" id="'+addclass+'" class="table-icon"><span class="glyphicon glyphicon-plus"></span></a></div></div><div id="eventRows"></div>';
     return html;
 }
 //This is in progress Code
-function gernerateDayofWeek()
+function gernerateDayofWeek(interval)
  {
- var daysOfWeek = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
- var html ='<div class="checkbox">';
- for(i=0;i<7;i++)
+    var daysOfWeek = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    var html ='<div class="checkbox">';
+    var selectedDays = [];
+    var keys=[];
+    $.each(interval,function(key,value){
+            selectedDays[key] = value['s_day']; 
+            keys[value['s_day']]=key;
+        });
+        
+    for(var i=0;i<7;i++)
+    {
+        console.log(selectedDays[keys[daysOfWeek[i]]]);
+        console.log(daysOfWeek[i]);
+        if (typeof selectedDays[keys[daysOfWeek[i]]] !== "undefined" && daysOfWeek[i] == selectedDays[keys[daysOfWeek[i]]]) {
+            //Already exist    
+            html+='<label><input checked type="checkbox" name="dayEdit['+keys[daysOfWeek[i]]+']" id="day_'+daysOfWeek[i]+'" value="'+daysOfWeek[i]+'">'+daysOfWeek[i]+'</label>';
+        }
+        else
+        {
+            html+='<label><input type="checkbox" name="day[]" id="day_'+daysOfWeek[i]+'" value="'+daysOfWeek[i]+'">'+daysOfWeek[i]+'</label>';
+        }
+    }
+    html+='</div>';
+    return html;
+ }
+ 
+ function generateMonth(flag,interval)
  {
- html+='<label><input type="checkbox" name="day[]" id="day_'+daysOfWeek[i]+'" value="'+daysOfWeek[i]+'" onchange="StoreDaysOfWeek(\''+daysOfWeek[i]+'\')">'+daysOfWeek[i]+'</label>';
- }
- html+='</div>';
- return html;
- }
- /*
- function gernerateDayofMonth()
- {
- // Since no month has fewer than 28 days
- var date = new Date(2017, 10, 1);
- var days = [];
- console.log('month', 10, 'date.getMonth()', date.getMonth());
- while (date.getMonth() === 10) {
- days.push(new Date(date));
- date.setDate(date.getDate() + 1);
- }
- console.log(days);
- }
- */
- function StoreDaysOfWeek(day)
- {
-    alert(day);
-    var WeekDays=[];
-    var html ='';
-
-    WeekDays.push(day);
-    alert(WeekDays);
-    html+='<input type="hidden" name="WeekDays" value="'+WeekDays+'">';
+    var monthid=1;
+    var selectedDays = [];
+    var keys=[];
+    $.each(interval,function(key,value){
+            selectedDays[key] = value['month'];
+            keys[value['month']]=key;
+    });
+    console.log(selectedDays);
+    var html='<select name="month" id="month" onchange="gernerateDayofMonth(this.value,\''+flag+'\')">';     
+    var theMonths = ["January", "February", "March", "April", "May","June", "July", "August", "September", "October", "November", "December"];
+    for (var i=0; i<theMonths.length; i++,monthid++) {
     
-    alert(html);
+    if (typeof selectedDays[keys[monthid]] !== "undefined" && monthid == selectedDays[keys[monthid]]) {
+        html+= '<option selected value="'+monthid+'">'+theMonths[i]+'</option>';
+    }
+    else
+    {
+        html+= '<option value="'+monthid+'">'+theMonths[i]+'</option>';
+    }
+
+    }
+    html+='</select>';
+    return html;
  }
-
-
+ 
+ 
+function gernerateDayofMonth(month,flag,interval)
+{    
+//    alert("flag::"+flag+"::int::"+interval);
+    var dayid=1;
+    var date = new Date();
+    var year=date.getFullYear();
+    var totalDay=new Date(year, month, 0).getDate();
+    
+    var html ='<div id="schedulermonth"><div class="checkbox">';
+    var selectedDays = [];
+    
+    $.each(interval,function(key,value){
+            selectedDays[value['s_day']] = value['s_day'];            
+    });
+        
+    for(var i=0;i<totalDay;i++,dayid++)
+    {
+        $('#schedulermonth').remove();
+        if (typeof selectedDays[dayid] !== "undefined" && dayid == selectedDays[dayid]) {
+            html+='<label>&nbsp;&nbsp;&nbsp;<input checked type="checkbox" name="dayEdit[]" id="day_'+dayid+'" value="'+dayid+'">'+dayid+'</label>';
+        }
+        else
+        {
+           html+='<label>&nbsp;&nbsp;&nbsp;<input type="checkbox" name="day[]" id="day_'+dayid+'" value="'+dayid+'">'+dayid+'</label>';
+        }
+    }
+    html +='</div>';
+    if(typeof interval === "undefined" && flag === 'add')
+    {        
+        var timeHtml=getTime();
+        html+=   timeHtml;
+        $('#schedulerDate').append(html);
+    }
+    if(typeof interval === "undefined" && flag === 'edit')
+    {         
+        var timeHtml=getTime('editTime-ico-plus');
+        html+=   timeHtml;
+        $("#editSchedulerPopup #schedulerDateU").append(html);
+    }
+    else if(flag === 'edit')
+    {
+//        alert('else');
+//         $('#schedulermonth').append(html);
+        return html;
+    }
+}
