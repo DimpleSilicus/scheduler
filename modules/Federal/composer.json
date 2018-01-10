@@ -1,0 +1,20 @@
+{
+    "name": "modules/federal",
+    "description": "This is a federal module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dimple Agarwal",
+            "email": "dimple.agarwal@silicus.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Modules\\Federal": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "Illuminate/support": "~5"
+    }
+}

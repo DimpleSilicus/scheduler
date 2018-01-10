@@ -124,7 +124,18 @@ return [
     'log' => env('APP_LOG', 'single'),
 
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
-
+    
+    /*
+      |--------------------------------------------------------------------------
+      | Site theme Configuration
+      |--------------------------------------------------------------------------
+      |
+      | Here you may configure the theme settings for your application.
+      | Available Settings: default
+      |
+     */
+    'theme' => env('THEME', 'default'),
+    
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -177,9 +188,16 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         
+        App\Providers\TwilioRestClientProvider::class,
         //Scheduler Provide added by Dimple.
-        Modules\Scheduler\SchedulerServiceProvider::class
-
+        Modules\Scheduler\SchedulerServiceProvider::class,
+        //Naics Provide added by Dimple.
+        Modules\Naics\NaicsServiceProvider::class,
+        //Federal Provide added by Dimple.        
+        Modules\Federal\FederalServiceProvider::class,        
+        //Workflow Provide added by Dimple.        
+        Modules\Workflow\WorkflowServiceProvider::class,
+        
     ],
 
     /*

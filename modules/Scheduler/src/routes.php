@@ -23,7 +23,8 @@ Route::group([
     'namespace' => 'Modules\Scheduler\Controller'
 ], function () {
     
-    Route::get('/', 'SchedulerController@test');
+//    Route::get('/', 'SchedulerController@test');
+    Route::get('/home', 'CustomController@index');
     Route::get('/schedulerHome', 'SchedulerController@showHomePage');
     Route::post('/add_scheduler', 'SchedulerController@AddDailyScheduler'); 
     
@@ -48,9 +49,11 @@ Route::group([
     'namespace' => 'Modules\Scheduler\Controller'
 ], function () {
     
-    Route::get('/', 'SchedulerController@test');
+    Route::get('/', 'Auth\LoginController@showLoginForm');
+    Route::get('/login', 'Auth\LoginController@showLoginForm');
+    Route::get('/register', 'Auth\RegisterController@showRegistrationForm');
+    //Route::get('/login', 'Auth\LoginController@login');
 //    Route::get('/schedulerHome', 'SchedulerController@showHomePage');
-    
-    
+        
 });
 

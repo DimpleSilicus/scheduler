@@ -190,13 +190,26 @@ class Scheduler extends Model
         $schedulerTimes=$schedulerDetail['schedulerDateMultiple'];
         $schedulerTimesEdit=$schedulerDetail['schedulerDateMultipleEdit'];
         $arrDaily= SchedulerTime::getIntervalBySchedulerId($schedulerDetail['schedulerId']);
+        $existArr= SchedulerDay::getDayBySchedulerId($schedulerDetail['schedulerId']);
+        
         if($success)
         {
             //For new added time.
             if (is_array($schedulerTimes))
             {
                     //InsertDailyScheduler
-                    $dailyResponse=SchedulerDay::InsertTimeInterval($schedulerDetail['schedulerId'],$schedulerTimes);
+                    $timearr=SchedulerDay::InsertTimeInterval($schedulerDetail['schedulerId'],$schedulerTimes);
+                    if ($schedulerDetail['schedulerInterval'] == 'weekly' || $schedulerDetail['schedulerInterval'] == 'monthly' ) 
+                    {
+                        if (is_array($existArr) && !empty($existArr))
+                        {
+                            $existArrIndex= array_values($existArr);
+                            for($i=0;$i<count($timearr);$i++)
+                            {
+                                SchedulerIntersect::InsertIntersect($existArrIndex[0]['id'],$timearr[$i]);
+                            }
+                        }
+                    }
             }
             //For Update Existing Time.
             if (is_array($schedulerTimesEdit) && !empty($schedulerTimesEdit))
@@ -216,7 +229,7 @@ class Scheduler extends Model
                 $month=NULL;
                 $day=$schedulerDetail['day'];
                 $dayEdit=$schedulerDetail['dayEdit'];
-                $existArr= SchedulerDay::getDayBySchedulerId($schedulerDetail['schedulerId']);
+                
                 $schedulerData=array($day,$schedulerTimes);
                 if($schedulerDetail['schedulerInterval'] == 'monthly')
                 {
@@ -238,8 +251,8 @@ class Scheduler extends Model
                             //Delete from intersect table also.
                             
                         } else {                                 
-//                            echo "key::".$key;
-                            $dailyResponse= SchedulerDay::UpdateInterval($key,$dayEdit[$key],$month);   
+//                            echo "key::".$key,"::::".$dayEdit[$key];
+                            $dailyResponse= SchedulerDay::UpdateInterval($key,$dayEdit[$key],$month);                            
                         }
                     }                    
                 }
@@ -260,7 +273,7 @@ class Scheduler extends Model
                 }
             }   
         }
-//        echo $dailyResponse;
+        echo $dailyResponse;
         return $dailyResponse;
     }
     

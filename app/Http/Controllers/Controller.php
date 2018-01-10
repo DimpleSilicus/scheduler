@@ -66,7 +66,7 @@ class Controller extends BaseController
     public function __construct()
     {
         $this->url = config('app.url');
-        $this->theme = config('app.theme');
+        $this->theme = config('app.theme');        
     }
 
     /**

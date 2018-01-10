@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-@extends('layouts.app')
+@extends($theme.'.layouts.app')
 
 @section('content')
 <h3>Hello Scheduler</h3>
@@ -154,8 +154,8 @@
 
                                             <span class="form-highlight"></span>
                                             <span class="form-bar"></span>
-                                            <span class="text-danger" id="schedulerDate-div">
-                                                <strong id="form-errors-schedulerDate"></strong></span>
+                                            <span class="text-danger" id="schedulerFromDate-div">
+                                                <strong id="form-errors-schedulerFromDate"></strong></span>
                                         </div>
                                         <div class="col-sm-6">
                                             <h5>Scheduler To Date </h5>
@@ -163,8 +163,8 @@
 
                                             <span class="form-highlight"></span>
                                             <span class="form-bar"></span>
-                                            <span class="text-danger" id="schedulerDate-div">
-                                                <strong id="form-errors-schedulerDate"></strong></span>
+                                            <span class="text-danger" id="schedulerToDate-div">
+                                                <strong id="form-errors-schedulerToDate"></strong></span>
                                         </div>
                                     </div>
                                 </div>

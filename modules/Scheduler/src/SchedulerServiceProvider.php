@@ -28,23 +28,7 @@ use Illuminate\Support\Facades\Config;
  * @link None
  */
 class SchedulerServiceProvider extends ServiceProvider
-{
-
-    /**
-     * For register our service provider
-     *
-     * @name register
-     * @access public
-     * @author Dimple Agarwal <dimple.agarwal@silicus.com>
-     *
-     * @return void
-     */
-    public function register()
-    {
-        $this->app->bind('Scheduler', function ($app) {
-            return new Scheduler();
-        });
-    }
+{    
 
     /**
      * This function is for send migration files in migration folder
@@ -56,22 +40,15 @@ class SchedulerServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot()
-    {
-        // get theme name
-       
-       
-        
+    {                
         // set theme path
         $this->loadViewsFrom(__DIR__ . '/Views/', 'Scheduler');
         $sourceMigration = realpath(__DIR__ . '/../migrations');
         // $this->publishes([$sourceMigration => database_path('migrations')]);
         $this->loadMigrationsFrom($sourceMigration);
         // For js
-        $sourceJs = realpath(__DIR__ . '/../public/js');
+        realpath(__DIR__ . '/../public/js');    
         
-        $this->publishes([
-           // $sourceJs => base_path('public/theme/' . $theme . '/assets/scheduler/js/')
-        ]);
         
         // include route file of this package
         include __DIR__ . '/routes.php';

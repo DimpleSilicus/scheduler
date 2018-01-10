@@ -67,14 +67,17 @@ class Kernel extends ConsoleKernel
         $allCnt=count($allScheduler);
         for($i=0;$i<$allCnt;$i++)
         {
-            if(date('Y-m-d')> date('Y-m-d', strtotime($allScheduler[$i]['start_date'])) && date('Y-m-d')<= date('Y-m-d', strtotime($allScheduler[$i]['end_date'])))
+            if(date('Y-m-d')>= date('Y-m-d', strtotime($allScheduler[$i]['start_date'])) && date('Y-m-d')<= date('Y-m-d', strtotime($allScheduler[$i]['end_date'])))
             {
                 $templateData= EmailTemplate::GetTemplate($allScheduler[$i]['template_id']);
                 if($allScheduler[$i]['interval']=='weekly')
                 {
+                    $day = date('l', strtotime(date('Y-m-d')));                    
+                    if($day === $allScheduler[$i]['s_day'])
+                    {                        
                     switch ($allScheduler[$i]['s_day'])
                     {
-                        case 'Monday':    
+                        case 'Monday':                                
                             $this->RunWeekScheduler($allScheduler[$i]['id'],$schedule,$allScheduler[$i]['type'],$allScheduler[$i]['user_id'],$templateData[0]['id'],'mondays',$allScheduler[$i]['sid']);
                             break;
                         case 'Tuesday':
@@ -102,6 +105,7 @@ class Kernel extends ConsoleKernel
                             $this->RunWeekScheduler($allScheduler[$i]['id'],$schedule,$allScheduler[$i]['type'],$allScheduler[$i]['user_id'],$templateData[0]['id'],'sundays',$allScheduler[$i]['sid']);
                             break;
                     }
+                    }
                 }
                 else
                 {
@@ -121,13 +125,13 @@ class Kernel extends ConsoleKernel
         for($j=0;$j<$dailyCnt;$j++)
         {
             $schedulerId=$dailyScheduler[$j]['id'];
-            if(date('Y-m-d')> date('Y-m-d', strtotime($dailyScheduler[$j]['start_date'])) && date('Y-m-d')<= date('Y-m-d', strtotime($dailyScheduler[$j]['end_date'])))
+            if(date('Y-m-d')>= date('Y-m-d', strtotime($dailyScheduler[$j]['start_date'])) && date('Y-m-d')<= date('Y-m-d', strtotime($dailyScheduler[$j]['end_date'])))
             {                
                 if($dailyScheduler[$j]['type']=='email')
                 {
                     $schedule->command('DailyScheduler:dailyschedule '.$dailyScheduler[$j]['user_id'].' '. $dailyScheduler[$j]['template_id'])
-//                           ->dailyAt($dailyScheduler[$j]['time']);
-                               ->everyMinute()
+                           ->dailyAt($dailyScheduler[$j]['time'])
+//                               ->everyMinute()
                                 ->after(function() use($schedulerId) {
                                  // Task is complete...
                                      event(new ActionDone($schedulerId,1));                          
@@ -162,22 +166,22 @@ class Kernel extends ConsoleKernel
                 if(is_string($day))
                 {                   
                    $schedule->command('DailyScheduler:dailyschedule '.$user_id.' '. $templateId)
-//                           ->$day()->at($timeArr[$k]['time']);
-                                ->everyMinute()
-                                ->after(function() use ($sid) {
+                            ->$day()->at($timeArr[$k]['time'])
+//                                ->everyMinute()
+                            ->after(function() use ($sid) {
                                  // Task is complete...
                                      event(new ActionDone($sid,1));                          
-                                });
+                            });
                 }
                 else
                 {
                     $schedule->command('DailyScheduler:dailyschedule '.$user_id.' '. $templateId)
-//                           ->monthlyOn($day,$timeArr[$k]['time']);
-                                ->everyMinute()
-                                ->after(function() use ($sid) {
+                            ->monthlyOn($day,$timeArr[$k]['time'])
+//                                ->everyMinute()
+                            ->after(function() use ($sid) {
                                  // Task is complete...
-                                     event(new ActionDone($sid,1));                          
-                                });
+                                event(new ActionDone($sid,1));                          
+                            });
                 }
 //                       
            }

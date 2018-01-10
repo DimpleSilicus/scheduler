@@ -29,7 +29,8 @@ class CreateUsersTable extends Migration
             $table->enum('is_admin', [
                 0,
                 1
-            ])->default(0);				
+            ])->default(0);	
+            $table->string('phone_number',10);
             $table->rememberToken();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();

@@ -1,5 +1,6 @@
 <?php
 
+$theme = config('app.theme');
 return [
 
     /*

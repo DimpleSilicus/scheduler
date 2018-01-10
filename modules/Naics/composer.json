@@ -1,0 +1,20 @@
+{
+    "name": "modules/naics",
+    "description": "This is a naics module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dimple Agarwal",
+            "email": "dimple.agarwal@silicus.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Modules\\Naics": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "Illuminate/support": "~5"
+    }
+}

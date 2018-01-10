@@ -1,0 +1,20 @@
+{
+    "name": "modules/workflow",
+    "description": "This is a Workflow module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dimple Agarwal",
+            "email": "dimple.agarwal@silicus.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Modules\\Workflow": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "Illuminate/support": "~5"
+    }
+}

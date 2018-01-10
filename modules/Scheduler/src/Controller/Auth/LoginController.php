@@ -12,12 +12,11 @@
  * @link       None
  * @filesource
  */
-namespace Modules\User\Controllers\Auth;
+namespace Modules\Scheduler\Controller\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use Modules\Profile\Controller\ProfileController;
 
 /**
  * Registration & Login Controller
@@ -54,7 +53,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/profiles/mynetwork';
+    protected $redirectTo = '/home';
 
     protected $redirectAfterLogout = '/';
 
@@ -66,12 +65,12 @@ class LoginController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('guest', [
+        /*$this->middleware('guest', [
             'except' => [
                 'logout',
                 'getLogout'
             ]
-        ]);
+        ]);*/
     }
 
     /**
@@ -85,12 +84,7 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
-        $metadata = [
-            'title' => 'Login',
-            'description' => 'Login',
-            'keywords' => 'Login'
-        ];
-        $this->addMetadata($metadata);
+        
         
         return view($this->theme . '.auth.login');
     }

@@ -37,7 +37,6 @@ $(document).ready(function () {
                 console.log(data);
                 if (data.responseText != '')
                 {
-//                    console.log(data);
                     var obj = jQuery.parseJSON(data.responseText);
 //                            console.log(obj.errors.schedulerDateMultiple['profile']);
                     if (obj.errors.schedulerName) {
@@ -57,14 +56,24 @@ $(document).ready(function () {
                         $('#addScheduler #form-errors-scheduleTemplate').html(obj.errors.scheduleTemplate[0]);
                     }
                     if (obj.errors.schedulerDateMultiple) {
-                        alert(obj.errors.schedulerDateMultiple[0]);
+//                        alert(obj.errors.schedulerDateMultiple[0]);
                         $("#addScheduler #schedulerDateMultiple-div").addClass("has-error");
                         $('#addScheduler #form-errors-schedulerDateMultiple').html(obj.errors.schedulerDateMultiple[0]);
                     }
                     if (obj.errors.schedulerDate) {
-                        alert(obj.errors.schedulerDate[0]);
+//                        alert(obj.errors.schedulerDate[0]);
                         $("#addScheduler #schedulerDate-div").addClass("has-error");
                         $('#addScheduler #form-errors-schedulerDate').html(obj.errors.schedulerDate[0]);
+                    }
+                    if (obj.errors.schedulerFromDate) {
+//                        alert(obj.errors.schedulerFromDate[0]);
+                        $("#addScheduler #schedulerFromDate-div").addClass("has-error");
+                        $('#addScheduler #form-errors-schedulerFromDate').html(obj.errors.schedulerFromDate[0]);
+                    }
+                    if (obj.errors.schedulerToDate) {
+//                        alert(obj.errors.schedulerToDate[0]);
+                        $("#addScheduler #schedulerToDate-div").addClass("has-error");
+                        $('#addScheduler #form-errors-schedulerToDate').html(obj.errors.schedulerToDate[0]);
                     }
                 }
             }
@@ -425,16 +434,17 @@ function gernerateDayofMonth(month,flag,interval)
     
     var html ='<div id="schedulermonth"><div class="checkbox">';
     var selectedDays = [];
-    
+    var keys=[];
     $.each(interval,function(key,value){
-            selectedDays[value['s_day']] = value['s_day'];            
+            selectedDays[value['s_day']] = value['s_day'];  
+            keys=key;
     });
         
     for(var i=0;i<totalDay;i++,dayid++)
     {
         $('#schedulermonth').remove();
         if (typeof selectedDays[dayid] !== "undefined" && dayid == selectedDays[dayid]) {
-            html+='<label>&nbsp;&nbsp;&nbsp;<input checked type="checkbox" name="dayEdit[]" id="day_'+dayid+'" value="'+dayid+'">'+dayid+'</label>';
+            html+='<label>&nbsp;&nbsp;&nbsp;<input checked type="checkbox" name="dayEdit['+keys+']" id="day_'+dayid+'" value="'+dayid+'">'+dayid+'</label>';
         }
         else
         {

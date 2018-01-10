@@ -17,13 +17,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Scheduler\Model\Scheduler;
-//use Modules\Scheduler\Model\DailyScheduler;
+
 use Modules\Scheduler\Model\SchedulerTime;
 use Modules\Scheduler\Model\EmailTemplate;
 use Modules\Scheduler\Model\SchedulerDay;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Rules\TimeValidation;
 
-use Carbon\Carbon;
+
 /**
  * SchedulerController class for scheduler functionality like showing scheduler home page, login page, get template details,
  * add scheduler data on add scheduler form submit.
@@ -46,19 +47,12 @@ class SchedulerController extends Controller
      */
     public function __construct()
     {        
-        parent::__construct();
+        parent::__construct();        
         
-        $jsFiles[]  = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js";
         $jsFiles[] = $this->url."js/scheduler.js";
-        $jsFiles[] = $this->url."js/jquery.validate.min.js";
-        $jsFiles[] = "http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js";
-        
-        $jsFiles[] = $this->url."js/additional-methods.js";
-        
-        $jsFiles[]  = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js";
-        $cssFiles[] = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css";
-        $jsFiles[]="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.0/js/bootstrap-datepicker.js";
-        $this->loadJsCSS($jsFiles, $cssFiles);
+        $jsFiles[] = $this->url."js/jquery.validate.min.js";                
+        $jsFiles[] = $this->url."js/additional-methods.js";    
+        $this->loadJsCSS($jsFiles);
     }
     
     /**
@@ -79,11 +73,7 @@ class SchedulerController extends Controller
                 ->with('HistoryResult', $HistoryResult);
         
     }
-    
-    public function showMainPage()
-    {
-        return view($this->theme . '.auth.login');
-    }
+   
     
     /**
      * Insert Daily Scheduler Data in Database and also in daily scheduler table.
@@ -105,8 +95,7 @@ class SchedulerController extends Controller
             'schedulerType.required' => 'Scheduler Type is required.',
             'schedulerInterval.required' => 'Scheduler Interval is required.',
             'scheduleTemplate.required' => 'Scheduler Template is required.',
-            'schedulerDateMultiple.required'=> 'Please add time.',
-                
+            'schedulerDateMultiple.required'=> 'Please add time.',                
             
 //            'schedulerDate.required' => 'Scheduler Date is required.'            
         ];
@@ -116,7 +105,9 @@ class SchedulerController extends Controller
             'schedulerType' => 'required',
             'schedulerInterval' => 'required',
             'scheduleTemplate' => 'required',
-            'schedulerDateMultiple'=>'required'
+            'schedulerDateMultiple'=>[new TimeValidation],
+            'schedulerFromDate' => 'date|before:schedulerToDate',
+            'schedulerToDate'=> 'date|after:schedulerFromDate',
 //            'schedulerFromDate' => 'date|after:tomorrow|date_format:Y-m-d',
         
         ], $messages);
@@ -249,9 +240,6 @@ class SchedulerController extends Controller
     
     
     public function EditScheduler(Request $request) {
-        
-//        dd($request->day);
-        
 
         // validate inputs
         $messages = [
@@ -329,5 +317,8 @@ class SchedulerController extends Controller
         if ($update) {
             \Session::flash('success', 'Scheduler Updated successfully.');
         }
-    }        
+    }     
+     
+    
+        
 }

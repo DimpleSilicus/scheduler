@@ -29,6 +29,10 @@ class AppServiceProvider extends ServiceProvider
         /* Set time stamp for CSS */
         view()->share('cssTimeStamp', $cssCacheEnabled ? '?t=' . time() : '');
         
+        /* Get and make global CMS theme */
+        $theme = config('app.theme');
+        view()->share('theme', $theme);
+        
         Schema::defaultStringLength(191);
     }
 

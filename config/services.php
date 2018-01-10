@@ -34,5 +34,24 @@ return [
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Third Party Services
+    |--------------------------------------------------------------------------
+    |
+    | This file is for storing the credentials for third party services such
+    | as Stripe, Mailgun, Mandrill, and others. This file provides a sane
+    | default location for this type of information, allowing packages
+    | to have a conventional place to find your various credentials.
+    |
+    */
 
+    'twilio' => [
+        'accountSid' => env('TWILIO_ACCOUNT_SID'),
+        'authToken' => env('TWILIO_AUTH_TOKEN'),
+        'number' => env('TWILIO_NUMBER')
+//        'userName' => env('USER_NAME'),
+//        'password' => env('PASSWORD')
+    ]
 ];
